@@ -7,7 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nestjs-app', {
+    MongooseModule.forRoot('mongodb://localhost/nestjs-app-mobile', {
       useNewUrlParser: true,
     }),
     AccountModule,
