@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -29,5 +30,9 @@ export class TypeProductController {
     const { name, urlImg } = newType;
     const createdType = await this.typeSer.create(name, urlImg);
     return res.status(HttpStatus.OK).json(createdType);
+  }
+  @Delete('delete/:_id')
+  async delete(@Param('_id') _id: string) {
+    return await this.typeSer.delete(_id);
   }
 }

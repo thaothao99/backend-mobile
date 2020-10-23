@@ -29,4 +29,15 @@ export class TypeProductService {
     const newType = new this.typeProductModel(data);
     return newType.save();
   }
+  async delete(_id: string): Promise<any> {
+    const existedType = await this.typeProductModel.findById(_id).exec();
+    // console.log(existedType, _id);
+    if (!existedType) {
+      throw new HttpException('Not found type!', HttpStatus.NOT_FOUND);
+    }
+    this.typeProductModel.deleteOne({ _id }).exec();
+    return {
+      message: 'Deleted type product!',
+    };
+  }
 }
