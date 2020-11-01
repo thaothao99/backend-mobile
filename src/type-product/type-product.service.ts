@@ -40,4 +40,15 @@ export class TypeProductService {
       message: 'Deleted type product!',
     };
   }
+  async update(_id:string, name: string, urlImg: string):Promise<TypeProduct>{
+    const existedType = await this.typeProductModel.findByIdAndUpdate(
+      _id,
+      {name, urlImg},
+      { new: true },
+    );
+    if(!existedType){
+      throw new HttpException('Not found type!', HttpStatus.NOT_FOUND)
+    }
+    return existedType
+  }
 }

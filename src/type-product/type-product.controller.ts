@@ -35,4 +35,10 @@ export class TypeProductController {
   async delete(@Param('_id') _id: string) {
     return await this.typeSer.delete(_id);
   }
+  @Post('/update')
+  async updateType(@Res() res, @Body() updateType: any){
+    const {_id, name, urlImg} = updateType
+    const updatedType = await this.typeSer.update(_id, name, urlImg)
+    return res.status(HttpStatus.OK).json(updateType)
+  }
 }
