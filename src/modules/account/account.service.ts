@@ -39,8 +39,6 @@ export class AccountService {
     const data = {
       username: createAccDTO.username,
       password: hashedPassword,
-      name: createAccDTO.name,
-      phone: createAccDTO.phone,
       email: createAccDTO.email,
     };
 
