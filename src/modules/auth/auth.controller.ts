@@ -30,9 +30,11 @@ export class AuthController {
         //   token,
         // });
         return res.redirect(`exp://127.0.0.1:19000?token=${token}`); // dev
+      else return res.redirect(`exp://127.0.0.1:19000?token=false`)
+
       } catch (err) {
       console.log(err);
-      return res.direct(`exp://127.0.0.1:19000?token=fail`)
+      return res.redirect(`exp://127.0.0.1:19000?token=false`)
     }
   }
 }
