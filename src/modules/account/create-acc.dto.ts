@@ -9,3 +9,9 @@ export interface CreateAccDTO extends Document {
   readonly password: string;
   readonly email: string;
 }
+export interface UpdateAccDTO extends Document {
+  readonly phone: string;
+  readonly email: string;
+  readonly address: string;
+  readonly urlImgl: string;
+}

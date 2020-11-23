@@ -6,4 +6,6 @@ export const AccSchema = new mongoose.Schema({
   name: String,
   phone: String,
   email: String,
+  address: String,
+  urlImg: String
 });

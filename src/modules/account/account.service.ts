@@ -2,10 +2,9 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Account } from './account.interface';
-import { CreateAccDTO, LoginAccDTO } from './create-acc.dto';
+import { CreateAccDTO, LoginAccDTO, UpdateAccDTO } from './create-acc.dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { error } from 'console';
 
 @Injectable()
 export class AccountService {
@@ -20,7 +19,7 @@ export class AccountService {
     const acc = await this.AccModel.findById(_id).exec();
     return acc;
   }
-  async addAcc(createAccDTO: CreateAccDTO): Promise<Account> {
+  async addAcc(createAccDTO: CreateAccDTO): Promise<string> {
     const existedEmail = await this.AccModel.findOne({
       email: createAccDTO.email,
     }).exec();
@@ -44,14 +43,25 @@ export class AccountService {
     };
 
     const newAcc = new this.AccModel(data);
-    return newAcc.save();
+    newAcc.save();
+    const token = await jwt.sign(
+      {
+        id: newAcc._id,
+        email: newAcc.email,
+      },
+      process.env.SERECT_KEY,
+    );
+    return token;
   }
 
   async delAcc(_id: string): Promise<any> {
     const deletedAcc = await this.AccModel.findByIdAndRemove(_id).exec();
     return deletedAcc;
   }
-  async updateAcc(_id: string, createAccDTO: CreateAccDTO): Promise<Account> {
+  async updateAcc(token: string, createAccDTO: UpdateAccDTO): Promise<Account> {
+    let decodeToken
+    decodeToken = await jwt.verify(token, process.env.SERECT_KEY);
+    const _id = decodeToken.id
     const updatedAccount = await this.AccModel.findByIdAndUpdate(
       _id,
       createAccDTO,
@@ -82,10 +92,14 @@ export class AccountService {
       return token;
     }
   }
-  async getMe(token: string): Promise<any> {
-    const decodeToken = await jwt.verify(token, process.env.SERECT_KEY);
-    console.log(decodeToken);
-    return decodeToken;
+  async getMe(token: string): Promise<Account> {
+    let decodeToken
+    decodeToken = jwt.verify(token, process.env.SERECT_KEY);
+    const acc = await this.AccModel.findOne({
+      _id: decodeToken.id,
+      email: decodeToken.email
+    })
+    return acc
   }
   async loginByMail(user: any): Promise<string> {
     // console.log(user);
@@ -107,6 +121,24 @@ export class AccountService {
       }
     } catch (error) {
       return error      
+    }
+  }
+  async updatePass(passwordCurrent: string, newPass: string, token: string): Promise<boolean> {
+    let acc
+    acc = await this.getMe(token)
+    if (!acc ||!bcrypt.compareSync(passwordCurrent, acc.password))
+      throw new HttpException(
+        'Your current password is missing or incorrect!',
+        HttpStatus.UNAUTHORIZED,
+      );
+    else {
+      const hashedPassword = bcrypt.hashSync(
+        newPass,
+        bcrypt.genSaltSync(10),
+      );
+      acc.password = hashedPassword
+      acc.save()
+      return true
     }
   }
 }

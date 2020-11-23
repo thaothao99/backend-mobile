@@ -12,7 +12,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { AccountService } from './account.service';
-import { CreateAccDTO, LoginAccDTO } from './create-acc.dto';
+import { CreateAccDTO, LoginAccDTO, UpdateAccDTO } from './create-acc.dto';
 import { AuthGuard } from '@nestjs/passport';
 @Controller('account')
 export class AccountController {
@@ -20,10 +20,10 @@ export class AccountController {
   // add a account
   @Post('/create')
   async addAccount(@Res() res, @Body() createCustomerDTO: CreateAccDTO) {
-    const account = await this.accService.addAcc(createCustomerDTO);
+    const token = await this.accService.addAcc(createCustomerDTO);
     return res.status(HttpStatus.OK).json({
       message: 'Account has been created successfully',
-      account,
+      token,
     });
   }
 
@@ -44,10 +44,11 @@ export class AccountController {
   @Post('/update')
   async updateAccount(
     @Res() res,
-    @Query('accountID') accountID,
-    @Body() createAccDTO: CreateAccDTO,
+    @Body() createAccDTO: UpdateAccDTO,
+    @Req() req
   ) {
-    const account = await this.accService.updateAcc(accountID, createAccDTO);
+    const token = req.headers.authorization.split(' ')[1]
+    const account = await this.accService.updateAcc(token, createAccDTO);
     if (!account) throw new NotFoundException('Account does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'Account has been successfully updated!',
@@ -68,9 +69,20 @@ export class AccountController {
   // @UseGuards(AuthGuard)
   @Get('/me')
   async getMe(@Res() res, @Req() req) {
-    console.log(req.headers.authorization.split(' ')[1]);
+    // console.log(req.headers.authorization.split(' ')[1]);
+    const token = req.headers.authorization.split(' ')[1]
+    const acc = await this.accService.getMe(token)
     return res.status(HttpStatus.OK).json({
-      message: 'success!',
+      message: 'success!',acc
+    });
+  }
+  @Post('/updatePass')
+  async updatePassword(@Req() req, @Res() res,  @Body() body) {
+    const token = req.headers.authorization.split(' ')[1]
+    const {passwordCurrent, password} = body
+    await this.accService.updatePass(passwordCurrent, password, token)
+    return res.status(HttpStatus.OK).json({
+      message: 'success!'
     });
   }
 }
