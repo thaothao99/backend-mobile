@@ -12,5 +12,6 @@ import { TypeProductSchema } from './type-product.schema';
   ],
   providers: [TypeProductService],
   controllers: [TypeProductController],
+  exports: [TypeProductService]
 })
 export class TypeProductModule {}

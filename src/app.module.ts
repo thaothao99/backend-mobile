@@ -6,16 +6,18 @@ import { AccountModule } from './modules/account/account.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { TypeProductModule } from './modules/type-product/type-product.module';
+import { BrandProductModule } from './modules/brand-product/brand-product.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nestjs-app-mobile', {
+    MongooseModule.forRoot('mongodb+srv://sa:TrnO5REDybNbSyGE@cluster0.fpeww.mongodb.net/mobile-database-dev?retryWrites=true&w=majority', {
       useNewUrlParser: true,
     }),
     AccountModule,
     AuthModule,
     ProductModule,
     TypeProductModule,
+    BrandProductModule
   ],
   controllers: [AppController],
   providers: [AppService],
