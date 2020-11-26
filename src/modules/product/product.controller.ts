@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -27,6 +27,18 @@ export class ProductController {
         const data = await this.productSer.getProduct(id);
         return res.status(HttpStatus.OK).json(data)
     }
+    @Get('/') 
+    async getProductBy(
+        @Res() res,
+        @Query('brand') brand: string, 
+        @Query('categories') categories: string, 
+        @Query('name') name: string,
+        @Query('sort') sort: string
+        ){
+        // console.log(sort)
+        const data = await this.productSer.getByBrand(brand, categories, name, sort);
+        return res.status(HttpStatus.OK).json(data)
+    }   
     @Post('/create')
     async createProduct(@Res() res, @Body() body) {
         // console.log(body)
@@ -42,7 +54,7 @@ export class ProductController {
             categories: body.categories,
             brand: body.brand
         }
-        const createdProduct = await this.productSer.createArr(data)
+        const createdProduct = await this.productSer.create(data)
         return res.status(HttpStatus.OK).json(createdProduct)
     }
 }
