@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { TypeProductModule } from './modules/type-product/type-product.module';
 import { BrandProductModule } from './modules/brand-product/brand-product.module';
+import { VariantProductModule } from './modules/variant-product/variant-product.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { BrandProductModule } from './modules/brand-product/brand-product.module
     AuthModule,
     ProductModule,
     TypeProductModule,
-    BrandProductModule
+    BrandProductModule,
+    VariantProductModule
   ],
   controllers: [AppController],
   providers: [AppService],

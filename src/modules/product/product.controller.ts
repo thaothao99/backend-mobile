@@ -1,10 +1,12 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
+import { VariantProductService } from '../variant-product/variant-product.service';
 import { ProductService } from './product.service';
 
 @Controller('product')
 export class ProductController {
     constructor(
-        private readonly productSer : ProductService
+        private readonly productSer : ProductService,
+        private readonly variantSer: VariantProductService
     ){}
     @Get('/all')
     async getAllProduct(@Res() res) {
@@ -23,9 +25,23 @@ export class ProductController {
     }
     @Get('/:id')
     async getProduct(@Res() res, @Param('id') id: string ){
-        console.log(id)
+        // console.log(id)
         const data = await this.productSer.getProduct(id);
-        return res.status(HttpStatus.OK).json(data)
+        const variants = await this.variantSer.getByProduct(id)
+        const dataRes = {
+            name: data.name,
+            ratingsAverage: data.ratingsAverage,
+            ratingsQuantity: data.ratingsQuantity,
+            price: data.price,
+            description: data.description,
+            imageCover: data.imageCover,
+            images: data.images,
+            categories: data.categories,
+            brand: data.brand,
+            date: data.date,
+            variants: variants
+        }
+        return res.status(HttpStatus.OK).json(dataRes)
     }
     @Get('/') 
     async getProductBy(
