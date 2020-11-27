@@ -8,6 +8,7 @@ import { ProductModule } from './modules/product/product.module';
 import { TypeProductModule } from './modules/type-product/type-product.module';
 import { BrandProductModule } from './modules/brand-product/brand-product.module';
 import { VariantProductModule } from './modules/variant-product/variant-product.module';
+import { ReviewModule } from './modules/review/review.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { VariantProductModule } from './modules/variant-product/variant-product.
     ProductModule,
     TypeProductModule,
     BrandProductModule,
-    VariantProductModule
+    VariantProductModule,
+    ReviewModule
   ],
   controllers: [AppController],
   providers: [AppService],
