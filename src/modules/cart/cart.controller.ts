@@ -26,7 +26,7 @@ export class CartController {
     }
     @Post('/update/:id')
     async update(@Param('id') id: string, @Res() res, @Body() data){
-        const {quantity} = data
+        const { quantity } = data
         console.log(quantity)
         await this.cartSer.update(id, quantity)
         return res.status(HttpStatus.OK).json({message: "updated!"})

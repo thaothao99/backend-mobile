@@ -11,6 +11,7 @@ import { ReviewModule } from './modules/review/review.module';
 import { WishModule } from './modules/wish/wish.module';
 import { CartModule } from './modules/cart/cart.module';
 import { VariantProductModule } from './modules/variant-product/variant-product.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { VariantProductModule } from './modules/variant-product/variant-product.
     VariantProductModule,
     ReviewModule,
     WishModule,
-    CartModule
+    CartModule, 
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],
