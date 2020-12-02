@@ -14,5 +14,6 @@ import { VariantProductModule } from '../variant-product/variant-product.module'
   ],
   providers: [ProductService],
   controllers: [ProductController],
+  exports: [ProductService]
 })
 export class ProductModule {}

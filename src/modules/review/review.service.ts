@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AccountService } from '../account/account.service';
+import { ProductService } from '../product/product.service';
 import { Review } from './review.interface';
 
 @Injectable()
@@ -9,14 +10,17 @@ export class ReviewService {
     constructor(
         @InjectModel('Review')
         private readonly reviewModel: Model<Review>,
-        private readonly accSer: AccountService
+        private readonly accSer: AccountService,
+        private readonly productSer: ProductService
     ){}
     async getAll(): Promise<Review[]>{
         return await this.reviewModel.find().exec()
     }
     async create(data) : Promise<Review> {
         const user = await this.accSer.getMe(data.user)
-        console.log(user)
+        const {product, rating} = data
+        const updatedProduct = await this.productSer.update(product, rating )
+        console.log(updatedProduct)
         const dataCreate = {
             review: data.review,
             rating: data.rating,

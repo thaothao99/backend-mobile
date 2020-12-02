@@ -517,5 +517,30 @@ export class ProductService {
   
       }
     }
+    if(!nameProduct) {
+      if(sort) {
+        // console.log('sorted')
+        switch(sort) {
+          case 'newest':
+            return await this.productModel.find().sort({'date': -1}).limit(10)
+          case 'hight-ratting':
+            return await this.productModel.find().sort({'ratingsAverage': -1}).limit(10)
+        }
+      }
+    }
+  }
+  async update(_id, rating) {
+    const product = await this.productModel.findOne({_id})
+    const ratingsQuantity = product.ratingsQuantity +1
+    const ratingsAverage = (product.ratingsAverage* product.ratingsQuantity + rating)/ ratingsQuantity
+    const updatedProduct = await this.productModel.findByIdAndUpdate(
+      _id,
+      {
+        ratingsQuantity,
+        ratingsAverage: Math.round((ratingsAverage + Number.EPSILON) * 10) / 10,
+      },
+      { new: true },
+    );
+    return updatedProduct
   }
 }

@@ -9,6 +9,7 @@ import { TypeProductModule } from './modules/type-product/type-product.module';
 import { BrandProductModule } from './modules/brand-product/brand-product.module';
 import { VariantProductModule } from './modules/variant-product/variant-product.module';
 import { ReviewModule } from './modules/review/review.module';
+import { WishModule } from './modules/wish/wish.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { ReviewModule } from './modules/review/review.module';
     TypeProductModule,
     BrandProductModule,
     VariantProductModule,
-    ReviewModule
+    ReviewModule,
+    WishModule
   ],
   controllers: [AppController],
   providers: [AppService],
