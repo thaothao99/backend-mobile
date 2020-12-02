@@ -7,9 +7,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { TypeProductModule } from './modules/type-product/type-product.module';
 import { BrandProductModule } from './modules/brand-product/brand-product.module';
-import { VariantProductModule } from './modules/variant-product/variant-product.module';
 import { ReviewModule } from './modules/review/review.module';
 import { WishModule } from './modules/wish/wish.module';
+import { CartModule } from './modules/cart/cart.module';
+import { VariantProductModule } from './modules/variant-product/variant-product.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { WishModule } from './modules/wish/wish.module';
     BrandProductModule,
     VariantProductModule,
     ReviewModule,
-    WishModule
+    WishModule,
+    CartModule
   ],
   controllers: [AppController],
   providers: [AppService],

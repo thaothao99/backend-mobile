@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ProductService } from '../product/product.service';
 import { VariantProduct } from './variant-product.interface';
 const dataDev = [
     {
@@ -591,7 +592,8 @@ const dataDev = [
 export class VariantProductService {
     constructor(
         @InjectModel('VariantProduct')
-        private readonly variantModel : Model<VariantProduct>
+        private readonly variantModel : Model<VariantProduct>,
+        // private readonly productSer: ProductService
     ){}
     async getByProduct(productId: string) {
         console.log(productId)
@@ -602,10 +604,26 @@ export class VariantProductService {
         return await this.variantModel.find()
     }
     async create() {
-        dataDev.forEach((i)=> {
+        dataDev.forEach(async(i)=> {
+            // const product = await this.productSer.getProduct(i.productId)
+            // const data ={
+            //     productId: i.productId,
+            //     color: i.color,
+            //     quantity: i.quantity,
+            //     size: i.size,
+            //     product: product
+            // }
+            // // console.log(product)
+            
+            // const re = new this.variantModel(data);
             const re = new this.variantModel(i);
+
             return re.save()
         })
         return true
+    }
+    async getById(_id){
+        const data = await this.variantModel.findOne({_id})
+        return data
     }
 }

@@ -9,4 +9,9 @@ export class VariantProductController {
         const data = await this.variantSer.getAll()
         return res.status(HttpStatus.OK).json(data)
     }
+    @Get('/create')
+    async get(@Res() res){
+        const data = await this.variantSer.create()
+        return res.status(HttpStatus.OK).json('success')
+    }
 }
