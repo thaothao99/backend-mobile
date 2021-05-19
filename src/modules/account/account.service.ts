@@ -40,6 +40,7 @@ export class AccountService {
       username: createAccDTO.username,
       password: hashedPassword,
       email: createAccDTO.email,
+      role: 'user',
     };
 
     const newAcc = new this.AccModel(data);
@@ -59,9 +60,9 @@ export class AccountService {
     return deletedAcc;
   }
   async updateAcc(token: string, createAccDTO: UpdateAccDTO): Promise<Account> {
-    let decodeToken
+    let decodeToken;
     decodeToken = await jwt.verify(token, process.env.SERECT_KEY);
-    const _id = decodeToken.id
+    const _id = decodeToken.id;
     const updatedAccount = await this.AccModel.findByIdAndUpdate(
       _id,
       createAccDTO,
@@ -93,13 +94,13 @@ export class AccountService {
     }
   }
   async getMe(token: string): Promise<Account> {
-    let decodeToken
+    let decodeToken;
     decodeToken = jwt.verify(token, process.env.SERECT_KEY);
     const acc = await this.AccModel.findOne({
       _id: decodeToken.id,
-      email: decodeToken.email
-    })
-    return acc
+      email: decodeToken.email,
+    });
+    return acc;
   }
   async loginByMail(user: any): Promise<string> {
     // console.log(user);
@@ -108,7 +109,7 @@ export class AccountService {
       // console.log(user.email);
       if (!existedAcc) {
         // throw new HttpException('Sign up account!', HttpStatus.UNAUTHORIZED);
-        console.log('Login failed')
+        console.log('Login failed');
       } else {
         const token = await jwt.sign(
           {
@@ -120,25 +121,26 @@ export class AccountService {
         return token;
       }
     } catch (error) {
-      return error      
+      return error;
     }
   }
-  async updatePass(passwordCurrent: string, newPass: string, token: string): Promise<boolean> {
-    let acc
-    acc = await this.getMe(token)
-    if (!acc ||!bcrypt.compareSync(passwordCurrent, acc.password))
+  async updatePass(
+    passwordCurrent: string,
+    newPass: string,
+    token: string,
+  ): Promise<boolean> {
+    let acc;
+    acc = await this.getMe(token);
+    if (!acc || !bcrypt.compareSync(passwordCurrent, acc.password))
       throw new HttpException(
         'Your current password is missing or incorrect!',
         HttpStatus.UNAUTHORIZED,
       );
     else {
-      const hashedPassword = bcrypt.hashSync(
-        newPass,
-        bcrypt.genSaltSync(10),
-      );
-      acc.password = hashedPassword
-      acc.save()
-      return true
+      const hashedPassword = bcrypt.hashSync(newPass, bcrypt.genSaltSync(10));
+      acc.password = hashedPassword;
+      acc.save();
+      return true;
     }
   }
 }

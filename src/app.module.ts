@@ -13,9 +13,11 @@ import { CartModule } from './modules/cart/cart.module';
 import { VariantProductModule } from './modules/variant-product/variant-product.module';
 import { OrderModule } from './modules/order/order.module';
 
+const conectDB =
+  'mongodb+srv://sa:TrnO5REDybNbSyGE@cluster0.fpeww.mongodb.net/sneaker-store-dev?retryWrites=true&w=majority';
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://sa:TrnO5REDybNbSyGE@cluster0.fpeww.mongodb.net/mobile-database-dev?retryWrites=true&w=majority', {
+    MongooseModule.forRoot(conectDB, {
       useNewUrlParser: true,
     }),
     AccountModule,
@@ -26,8 +28,8 @@ import { OrderModule } from './modules/order/order.module';
     VariantProductModule,
     ReviewModule,
     WishModule,
-    CartModule, 
-    OrderModule
+    CartModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

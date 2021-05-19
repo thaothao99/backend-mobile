@@ -35,7 +35,7 @@ export class AccountController {
   }
 
   // Fetch a particular account using ID
-  @Get('account/:accountID')
+  @Get('/:accountID')
   async getAccountByID(@Res() res, @Param('accountID') accountID) {
     const acc = await this.accService.getAccByIds(accountID);
     if (!acc) throw new NotFoundException('Account does not exist!');
@@ -45,9 +45,9 @@ export class AccountController {
   async updateAccount(
     @Res() res,
     @Body() createAccDTO: UpdateAccDTO,
-    @Req() req
+    @Req() req,
   ) {
-    const token = req.headers.authorization.split(' ')[1]
+    const token = req.headers.authorization.split(' ')[1];
     const account = await this.accService.updateAcc(token, createAccDTO);
     if (!account) throw new NotFoundException('Account does not exist!');
     return res.status(HttpStatus.OK).json({
@@ -70,19 +70,20 @@ export class AccountController {
   @Get('/me')
   async getMe(@Res() res, @Req() req) {
     // console.log(req.headers.authorization.split(' ')[1]);
-    const token = req.headers.authorization.split(' ')[1]
-    const acc = await this.accService.getMe(token)
+    const token = req.headers.authorization.split(' ')[1];
+    const acc = await this.accService.getMe(token);
     return res.status(HttpStatus.OK).json({
-      message: 'success!',acc
+      message: 'success!',
+      acc,
     });
   }
   @Post('/updatePass')
-  async updatePassword(@Req() req, @Res() res,  @Body() body) {
-    const token = req.headers.authorization.split(' ')[1]
-    const {passwordCurrent, password} = body
-    await this.accService.updatePass(passwordCurrent, password, token)
+  async updatePassword(@Req() req, @Res() res, @Body() body) {
+    const token = req.headers.authorization.split(' ')[1];
+    const { passwordCurrent, password } = body;
+    await this.accService.updatePass(passwordCurrent, password, token);
     return res.status(HttpStatus.OK).json({
-      message: 'success!'
+      message: 'success!',
     });
   }
 }
