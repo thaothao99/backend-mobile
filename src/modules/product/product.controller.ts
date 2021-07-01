@@ -51,7 +51,6 @@ export class ProductController {
         @Query('name') name: string,
         @Query('sort') sort: string
         ){
-        // console.log(sort)
         const data = await this.productSer.getByBrand(brand, categories, name, sort);
         return res.status(HttpStatus.OK).json(data)
     }   

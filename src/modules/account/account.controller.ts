@@ -33,10 +33,21 @@ export class AccountController {
     const acc = await this.accService.getAllAcc();
     return res.status(HttpStatus.OK).json(acc);
   }
+  @Get('/me')
+  async getMe(@Res() res, @Req() req) {
+    console.log(req.headers.authorization.split(' ')[1]);
+    const token = req.headers.authorization.split(' ')[1];
+    const acc = await this.accService.getMe(token);
+    return res.status(HttpStatus.OK).json({
+      message: 'success!',
+      acc,
+    });
+  }
 
   // Fetch a particular account using ID
   @Get('/:accountID')
   async getAccountByID(@Res() res, @Param('accountID') accountID) {
+    console.log('accountID', accountID);
     const acc = await this.accService.getAccByIds(accountID);
     if (!acc) throw new NotFoundException('Account does not exist!');
     return res.status(HttpStatus.OK).json(acc);
@@ -63,20 +74,7 @@ export class AccountController {
       token,
     });
   }
-  @UseGuards(AuthGuard('google'))
-  @Post('/login-mail')
-  async loginByMail(@Req() req) {}
-  // @UseGuards(AuthGuard)
-  @Get('/me')
-  async getMe(@Res() res, @Req() req) {
-    // console.log(req.headers.authorization.split(' ')[1]);
-    const token = req.headers.authorization.split(' ')[1];
-    const acc = await this.accService.getMe(token);
-    return res.status(HttpStatus.OK).json({
-      message: 'success!',
-      acc,
-    });
-  }
+
   @Post('/updatePass')
   async updatePassword(@Req() req, @Res() res, @Body() body) {
     const token = req.headers.authorization.split(' ')[1];

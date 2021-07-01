@@ -9,15 +9,29 @@ import {
   Res,
 } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
+import { ProductService } from '../product/product.service';
 import { TypeProductService } from './type-product.service';
 
 @Controller('type-product')
 export class TypeProductController {
-  constructor(private readonly typeSer: TypeProductService) {}
+  constructor(
+    private readonly typeSer: TypeProductService,
+    private readonly proSer: ProductService,
+  ) {}
   @Get('all')
   async getAllType(@Res() res) {
     const types = await this.typeSer.getAll();
-    return res.status(HttpStatus.OK).json(types);
+    let resData = [];
+    for (const el of types) {
+      const pro = await this.proSer.getByBrand(null, el.name, null, null);
+      resData.push({
+        _id: el._id,
+        name: el.name,
+        urlImg: el.urlImg,
+        quantity: pro.length,
+      });
+    }
+    return res.status(HttpStatus.OK).json(resData);
   }
   @Get('/:name')
   async getType(@Res() res, @Param('name') name) {
@@ -36,9 +50,9 @@ export class TypeProductController {
     return await this.typeSer.delete(_id);
   }
   @Post('/update')
-  async updateType(@Res() res, @Body() updateType: any){
-    const {_id, name, urlImg} = updateType
-    const updatedType = await this.typeSer.update(_id, name, urlImg)
-    return res.status(HttpStatus.OK).json(updateType)
+  async updateType(@Res() res, @Body() updateType: any) {
+    const { _id, name, urlImg } = updateType;
+    const updatedType = await this.typeSer.update(_id, name, urlImg);
+    return res.status(HttpStatus.OK).json(updateType);
   }
 }

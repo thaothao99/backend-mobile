@@ -14,7 +14,7 @@ import { VariantProductModule } from './modules/variant-product/variant-product.
 import { OrderModule } from './modules/order/order.module';
 
 const conectDB =
-  'mongodb+srv://sa:TrnO5REDybNbSyGE@cluster0.fpeww.mongodb.net/sneaker-store-dev?retryWrites=true&w=majority';
+  'mongodb+srv://sa:TrnO5REDybNbSyGE@cluster0.fpeww.mongodb.net/mobile-database-dev?retryWrites=true&w=majority';
 @Module({
   imports: [
     MongooseModule.forRoot(conectDB, {
